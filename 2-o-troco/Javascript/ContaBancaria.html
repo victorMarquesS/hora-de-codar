@@ -8,21 +8,31 @@
     
 		var saldo = 100.5; // Float (Número com ponto flutuante)
 
+		var nome = prompt("Qual o seu nome?")
+
 		/*  Função principal. */
 		function inicio() {
 
+			alert("Seja bem-vindo " + nome)
+
 			var escolha = parseInt(prompt('Selecione uma opção 1.) Saldo 2.) Depósito 3.) Saque 4.) Sair'));
 
-			if (escolha === 1) {
-				ver_saldo();
-			} else if (escolha === 2) {
-				fazer_deposito();
-			} else if (escolha === 3) {
-				fazer_saque();
-			} else if (escolha === 4) {
-				sair();
-			} else {
-				erro();
+			switch (escolha){
+				case 1:         /* Se escolha igual a 1, chamar (ver_saldo) */
+					ver_saldo();
+				
+				case 2:
+					fazer_deposito();
+				
+				case 3:
+					fazer_saque();
+					break
+				
+				case 4:
+					sair();
+
+				default 
+					erro();
 			}
 		}
 
@@ -73,7 +83,7 @@
 		}
 
 
-
+		/* Aqui é chamado a função*/
 		inicio();
 	</script>
 </head>
