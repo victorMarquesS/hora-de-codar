@@ -1,69 +1,137 @@
-<html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel Terabithia - Hóspedes</title>
+    <script>
+        var nomeHotel = "Terabithia";
+        var nomeUsuario = localStorage.getItem("nomeUsuarioHotel") || "Funcionário";
+        var lista_hospedes = JSON.parse(localStorage.getItem("listaHospedesHotel")) || [];
 
-	<head>
-		<script>
-			// O código é todo modulado por funções para permitir uma organização melhor. 
-		
-			// Uma lista de exemplo que podemos usar sem ter que informar usuários sempre.
-			//var lista_hospedes = ["Gabriel Augusto", "Roberto Gómez Bolaños", "María Antonieta de las Nieves", "Hector Bonilha", "Carlos Villagrán", "Ramón Valdés"]; 
-			
-			var lista_hospedes = [];
-			
-			function sistema_cadastrar_hospedes() {
+        function sistema_cadastrar_hospedes() {
+            var escolha_hospedes = parseInt(prompt("Cadastro de Hóspedes\n\nSelecione uma opção:\n1. Cadastrar\n2. Pesquisar exato\n3. Pesquisar prefixo\n4. Listar\n5. Atualizar\n6. Remover\n7. Voltar"));
 
-				var escolha_hospedes = parseInt(prompt('Cadastro de Hóspedes\n\n Selecione uma opção: \n1. Cadastrar \n2. Pesquisar \n3. Sair'));
+            switch (escolha_hospedes) {
+                case 1: cadastrar_hospedes(); break;
+                case 2: pesquisar_hospedes(); break;
+                case 3: pesquisar_prefixo(); break;
+                case 4: listar_hospedes(); break;
+                case 5: atualizar_hospedes(); break;
+                case 6: remover_hospedes(); break;
+                case 7: window.location.href = "Hotel.html"; break;
+                default: erro_pesquisar_hospedes(); break;
+            }
+        }
 
-				if (escolha_hospedes === 1) {
-					cadastrar_hospedes();
-				} else if (escolha_hospedes === 2) {
-					pesquisar_hospedes();
-				} else if (escolha_hospedes === 3) {
-					//inicio();
-				} else {
-					erro_pesquisar_hospedes();
-				}
-			}
-			
-			function cadastrar_hospedes() {
-				// lenght é uma propriedade que retorna a quantidade de itens dentro do array. 
-				if (lista_hospedes.length >= 15){
-					alert("Numero máximo de hóspedes cadastrados.");
-				} else {	
-					var nome_hospede = prompt('Por favor, informe o nome da(o) hóspede:');
-					
-					// O método push() permite adicionar um item ao Array/Vetor. Importante dizer que ele adiciona o elemento ao final do Array/Vetor. 
-					lista_hospedes.push(nome_hospede);
-					console.log(lista_hospedes); // O console é usado apenas para exibir ao desenvolvedor todo mundo que já está cadastrado.
-					alert("Sucesso! Hóspede " + nome_hospede + " foi cadastrada(o) com sucesso!\n");
-				}
-				
-				sistema_cadastrar_hospedes();
-			}
-			
-			function pesquisar_hospedes() {
-				var nome_hospede = prompt('Por favor, informe o nome da(o) hóspede para pesquisa:');
-				// O método includes() procura por um elemento dentro do Array e retorna verdadeiro ou falso. Caso queira comparar números, o mais indicado é o método find();
-				if (lista_hospedes.includes(nome_hospede)){
-					alert(nome_hospede + ' encontrada(o).')
-				} else {
-					alert(nome_hospede + ' não foi encontrada(o).')
-				}
-				
-				sistema_cadastrar_hospedes() 
-			}
-			
-			function erro_pesquisar_hospedes(){
-				alert('Por favor, informe um número entre 1 e 3');
-				sistema_cadastrar_hospedes();
-			}
-			
-			sistema_cadastrar_hospedes();
-		
-		</script>
-	</head>
+        function salvarNoNavegador() {
+            localStorage.setItem("listaHospedesHotel", JSON.stringify(lista_hospedes));
+        }
 
-	<body>
+        function cadastrar_hospedes() {
+            if (lista_hospedes.length >= 15) {
+                alert("Máximo de cadastros atingido");
+            } else {
+                var nome_hospede = prompt("Por favor, informe o nome da(o) hóspede:");
+                if (nome_hospede === null || nome_hospede === "") return sistema_cadastrar_hospedes();
 
-	</body>
+                var existe = false;
+                for (var i = 0; i < lista_hospedes.length; i++) {
+                    if (lista_hospedes[i].nome.toLowerCase() === nome_hospede.toLowerCase()) existe = true;
+                }
 
+                if (existe) {
+                    alert("Hóspede já cadastrado");
+                } else {
+                    var dataHora = new Date().toLocaleString();
+                    lista_hospedes.push({ nome: nome_hospede, data: dataHora });
+                    salvarNoNavegador();
+                    alert("Hóspede cadastrado com sucesso.");
+                }
+            }
+            sistema_cadastrar_hospedes();
+        }
+
+        function pesquisar_hospedes() {
+            var nome_hospede = prompt("Por favor, informe o nome da(o) hóspede para pesquisa:");
+            var encontrado = false;
+            for (var i = 0; i < lista_hospedes.length; i++) {
+                if (lista_hospedes[i].nome === nome_hospede) {
+                    alert("Hospede " + lista_hospedes[i].nome + " foi encontrado");
+                    encontrado = true;
+                }
+            }
+            if (!encontrado) alert("Hóspede não encontrado");
+            sistema_cadastrar_hospedes();
+        }
+
+        function pesquisar_prefixo() {
+            var prefixo = prompt("Prefixo do nome:");
+            var resultado = "Resultados:\n";
+            for (var i = 0; i < lista_hospedes.length; i++) {
+                if (lista_hospedes[i].nome.toLowerCase().indexOf(prefixo.toLowerCase()) === 0) {
+                    resultado += "[" + (i + 1) + "] " + lista_hospedes[i].nome + "\n";
+                }
+            }
+            alert(resultado);
+            sistema_cadastrar_hospedes();
+        }
+
+        function listar_hospedes() {
+            lista_hospedes.sort(function(a, b) { return a.nome.localeCompare(b.nome); });
+            var listaStr = "Hóspedes Cadastrados (A-Z):\n";
+            for (var i = 0; i < lista_hospedes.length; i++) {
+                listaStr += "[" + (i + 1) + "] " + lista_hospedes[i].nome + " - " + lista_hospedes[i].data + "\n";
+            }
+            alert(listaStr);
+            sistema_cadastrar_hospedes();
+        }
+
+        function atualizar_hospedes() {
+            if (lista_hospedes.length === 0) {
+                alert("Nenhum hóspede cadastrado.");
+                return sistema_cadastrar_hospedes();
+            }
+            var index = parseInt(prompt("Índice para atualizar (1 a " + lista_hospedes.length + "):")) - 1;
+            if (index >= 0 && index < lista_hospedes.length) {
+                var novoNome = prompt("Novo nome:");
+                lista_hospedes[index].nome = novoNome;
+                salvarNoNavegador();
+                alert("Operação realizada com sucesso");
+            } else {
+                alert("Hóspede não encontrado");
+            }
+            sistema_cadastrar_hospedes();
+        }
+
+        function remover_hospedes() {
+            if (lista_hospedes.length === 0) {
+                alert("Nenhum hóspede cadastrado.");
+                return sistema_cadastrar_hospedes();
+            }
+            var index = parseInt(prompt("Índice para remover (1 a " + lista_hospedes.length + "):")) - 1;
+            if (index >= 0 && index < lista_hospedes.length) {
+                lista_hospedes.splice(index, 1);
+                salvarNoNavegador();
+                alert("Operação realizada com sucesso");
+            } else {
+                alert("Hóspede não encontrado");
+            }
+            sistema_cadastrar_hospedes();
+        }
+
+        function erro_pesquisar_hospedes() {
+            alert('Por favor, informe um número entre 1 e 7');
+            sistema_cadastrar_hospedes();
+        }
+
+        if (nomeUsuario === "Funcionário") {
+            alert("Acesso negado. Por favor, faça login no sistema principal.");
+            window.location.href = "Hotel.html";
+        } else {
+            sistema_cadastrar_hospedes();
+        }
+    </script>
+</head>
+<body>
+</body>
 </html>

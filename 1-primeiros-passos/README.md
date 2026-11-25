@@ -56,7 +56,7 @@ Nesta etapa, você vai ensinar o programa a tomar decisões com base em regras.
 
 2.6. Leia 4 valores diferentes e informe apenas o primeiro, o último e o maior deles.
 
-2.7. Leia 6 números. Some apenas os valores menores que 72. Exiba a soma e todos os valores informados.
+2.7. let 
 
 2.8. Leia 4 números, aceitando apenas valores maiores que 0 e menores que 10. Calcule a média e:
 

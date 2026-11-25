@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bichinho Virtual - LoL Edition</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>{{TITULO_TOPO}}</h1>
+        
+        <div id="tela-selecao" class="selecao {{CLASSE_SELECAO}}">
+            <form method="POST" class="card-form">
+                <input type="hidden" name="acao" value="iniciar">
+                <input type="hidden" name="campeao" value="Garen">
+                <button type="submit" class="card-personagem">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Garen.png" alt="Garen">
+                    <p>Garen</p>
+                </button>
+            </form>
+
+            <form method="POST" class="card-form">
+                <input type="hidden" name="acao" value="iniciar">
+                <input type="hidden" name="campeao" value="Katarina">
+                <button type="submit" class="card-personagem">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Katarina.png" alt="Katarina">
+                    <p>Katarina</p>
+                </button>
+            </form>
+
+            <form method="POST" class="card-form">
+                <input type="hidden" name="acao" value="iniciar">
+                <input type="hidden" name="campeao" value="Zed">
+                <button type="submit" class="card-personagem">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Zed.png" alt="Zed">
+                    <p>Zed</p>
+                </button>
+            </form>
+
+            <form method="POST" class="card-form">
+                <input type="hidden" name="acao" value="iniciar">
+                <input type="hidden" name="campeao" value="Riven">
+                <button type="submit" class="card-personagem">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/14.4.1/img/champion/Riven.png" alt="Riven">
+                    <p>Riven</p>
+                </button>
+            </form>
+        </div>
+
+        <div id="tela-jogo" class="{{CLASSE_JOGO}}">
+            <h2 id="nome-pet">{{NOME_PET}}</h2>
+            <p id="descricao-pet" class="descricao">{{DESCRICAO_PET}}</p>
+            
+            <div class="avatar-container">
+                <img id="avatar-pet" class="avatar {{CLASSE_ADULTO}}" src="{{AVATAR_SRC}}" alt="Pet">
+            </div>
+
+            <div class="status-barras">
+                <div class="barra-grupo">
+                    <label><span>Fome</span> <span>{{FOME}}/100</span></label>
+                    <div class="barra-fundo"><div id="barra-fome" class="barra-preenchimento" style="width: 50%; /* {{STYLE_FOME}} */"></div></div>
+                </div>
+                <div class="barra-grupo">
+                    <label><span>Felicidade</span> <span>{{FELICIDADE}}/100</span></label>
+                    <div class="barra-fundo"><div id="barra-felicidade" class="barra-preenchimento" style="width: 50%; /* {{STYLE_FELICIDADE}} */"></div></div>
+                </div>
+                <div class="barra-grupo">
+                    <label><span>Cansaço</span> <span>{{CANSACO}}/100</span></label>
+                    <div class="barra-fundo"><div id="barra-cansaco" class="barra-preenchimento" style="width: 0%; /* {{STYLE_CANSACO}} */"></div></div>
+                </div>
+                <div class="barra-grupo">
+                    <label><span>Idade</span> <span>{{IDADE}} anos (Meta: 50)</span></label>
+                </div>
+            </div>
+
+            <div class="painel-previsao">
+                <div class="previsao-item">
+                    <strong>⏳ Passar Tempo (Custo):</strong>
+                    <span>{{PREVISAO_TEMPO}}</span>
+                </div>
+                <div class="previsao-acoes">
+                    <span>{{PREVISAO_ACOES}}</span>
+                </div>
+            </div>
+
+            <div class="acoes-container">
+                Ações neste turno: <span>{{ACOES_RESTANTES}} / 2</span>
+            </div>
+
+            <div class="botoes">
+                <form method="POST">
+                    <input type="hidden" name="acao" value="alimentar">
+                    <button type="submit" class="{{CLASSE_BTN_ACAO}}">🍖 Alimentar</button>
+                </form>
+
+                <form method="POST">
+                    <input type="hidden" name="acao" value="brincar">
+                    <button type="submit" class="{{CLASSE_BTN_ACAO}}">🎾 Brincar</button>
+                </form>
+
+                <form method="POST">
+                    <input type="hidden" name="acao" value="descansar">
+                    <button type="submit" class="{{CLASSE_BTN_ACAO}}">💤 Descansar</button>
+                </form>
+
+                <form method="POST">
+                    <input type="hidden" name="acao" value="especial">
+                    <button type="submit" class="btn-especial {{CLASSE_BTN_ACAO}}">✨ Habilidade</button>
+                </form>
+
+                <form method="POST" class="form-tempo">
+                    <input type="hidden" name="acao" value="passarTempo">
+                    <button type="submit" class="btn-passar {{CLASSE_BTN_TEMPO}}">⏳ Passar Tempo</button>
+                </form>
+            </div>
+
+            <div id="log">{{LOGS}}</div>
+
+            <form method="POST">
+                <input type="hidden" name="acao" value="reiniciar">
+                <button type="submit" class="btn-reiniciar">Voltar ao Menu</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

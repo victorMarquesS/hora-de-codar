@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+let planetas = ["Mercúrio", "Vênus", "Terra", "Marte", "Júpiter", "Saturno", "Urano", "Netuno", "Plutão"];
+
+alert(`Lista de planetas do sistema solar:\n- ${planetas.join("\n- ")}`);
+
+let planetaDigitado = prompt("Digite o nome de um planeta para verificar se está na lista:");
+
+let listaMinuscula = planetas.map(p => p.toLowerCase());
+let buscaMinuscula = planetaDigitado ? planetaDigitado.trim().toLowerCase() : "";
+
+if (listaMinuscula.includes(buscaMinuscula)) {
+    alert(`O planeta ${planetaDigitado} está na lista!`);
+} else {
+    alert(`O planeta ${planetaDigitado} NÃO está na lista.`);
+}
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

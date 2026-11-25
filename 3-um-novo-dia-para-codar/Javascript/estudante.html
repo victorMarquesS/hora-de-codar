@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudantes Lista</title>
+    <script>
+let estudantes = [];
+let nomeDigitado = prompt("Digite o nome do estudante (ou 'PARE' para encerrar):");
+
+while (nomeDigitado !== null && nomeDigitado.toUpperCase() !== "PARE") {
+    estudantes.push(nomeDigitado);
+    nomeDigitado = prompt("Digite o nome do estudante (ou 'PARE' para encerrar):");
+}
+
+alert(`Quantidade de estudantes cadastrados: ${estudantes.length}`);
+
+if (estudantes.length > 0) {
+    alert(`Lista de estudantes:\n- ${estudantes.join("\n- ")}`);
+} else {
+    alert(`Nenhum estudante foi cadastrado.`);
+}
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

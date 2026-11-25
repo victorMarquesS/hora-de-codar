@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Frutas</title>
+    <script>
+let frutas = ["Maçã", "Banana", "Uva", "Pera", "Laranja"];
+
+alert(`Frutas disponíveis no mercado:\n- ${frutas.join("\n- ")}`);
+
+let frutaDigitada = prompt("Digite o nome de uma fruta para remover (ou 'PARE' para encerrar):");
+
+while (frutaDigitada !== null && frutaDigitada.toUpperCase() !== "PARE") {
+    let posicao = frutas.findIndex(fruta => fruta.toLowerCase() === frutaDigitada.trim().toLowerCase());
+
+    if (posicao !== -1) {
+        frutas.splice(posicao, 1);
+        alert(`Fruta foi retirada da lista`);
+
+        if (frutas.length === 0) {
+            alert(`Lista de compras finalizada`);
+            break;
+        }
+    } else {
+        alert(`Fruta indisponível no nosso mercado`);
+    }
+    
+    frutaDigitada = prompt("Digite o nome de uma fruta para remover (ou 'PARE' para encerrar):");
+}
+
+if (frutas.length > 0) {
+    alert(`Lista de frutas restantes:\n- ${frutas.join("\n- ")}`);
+}
+    </script>    
+</head>
+<body>
+    
+</body>
+</html>
