@@ -25,48 +25,76 @@ public class Main {
     }
 
     private static void handleRequest(HttpExchange exchange) throws IOException {
-        String path = exchange.getRequestURI().getPath();
-        Path webDir = Paths.get("../../web").normalize();
-        if (!Files.exists(webDir)) {
-            webDir = Paths.get("web").normalize();
-        }
+        try {
+            String path = exchange.getRequestURI().getPath();
+            
+            // Procura a pasta 'web' em todos os níveis possíveis a partir da raiz do workspace
+            Path[] possiveisCaminhos = {
+                Paths.get("5-uma-nova-geracao/JAVA/web"),
+                Paths.get("JAVA/web"),
+                Paths.get("../web"),
+                Paths.get("../../web"),
+                Paths.get("web")
+            };
 
-        // Servir CSS e imagens estáticas
-        if (path.endsWith(".css") || path.endsWith(".png")) {
-            Path file = webDir.resolve(path.substring(1));
-            if (Files.exists(file)) {
-                String contentType = path.endsWith(".css") ? "text/css; charset=UTF-8" : "image/png";
-                byte[] bytes = Files.readAllBytes(file);
-                exchange.getResponseHeaders().set("Content-Type", contentType);
-                exchange.sendResponseHeaders(200, bytes.length);
+            Path webDir = null;
+            for (Path p : possiveisCaminhos) {
+                if (Files.exists(p.resolve("BichinhoVirtual.html"))) {
+                    webDir = p.normalize();
+                    break;
+                }
+            }
+
+            if (webDir == null) {
+                String erro = "Erro: Pasta 'web' com BichinhoVirtual.html nao encontrada. Diretorio atual: " + System.getProperty("user.dir");
+                System.err.println(erro);
+                byte[] errBytes = erro.getBytes(StandardCharsets.UTF_8);
+                exchange.sendResponseHeaders(500, errBytes.length);
                 try (OutputStream os = exchange.getResponseBody()) {
-                    os.write(bytes);
+                    os.write(errBytes);
                 }
                 return;
             }
-        }
 
-        // Processar cliques dos botões (POST)
-        if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
-            String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-            Map<String, String> params = parseForm(body);
-            processarAcao(params);
+            // Servir CSS e imagens estáticas
+            if (path.endsWith(".css") || path.endsWith(".png")) {
+                Path file = webDir.resolve(path.substring(1));
+                if (Files.exists(file)) {
+                    String contentType = path.endsWith(".css") ? "text/css; charset=UTF-8" : "image/png";
+                    byte[] bytes = Files.readAllBytes(file);
+                    exchange.getResponseHeaders().set("Content-Type", contentType);
+                    exchange.sendResponseHeaders(200, bytes.length);
+                    try (OutputStream os = exchange.getResponseBody()) {
+                        os.write(bytes);
+                    }
+                    return;
+                }
+            }
 
-            exchange.getResponseHeaders().set("Location", "/");
-            exchange.sendResponseHeaders(303, -1);
-            return;
-        }
+            // Processar cliques dos botões (POST)
+            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
+                String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+                Map<String, String> params = parseForm(body);
+                processarAcao(params);
 
-        // Renderizar o HTML substituindo os dados do Java
-        Path htmlPath = webDir.resolve("BichinhoVirtual.html");
-        String html = Files.readString(htmlPath, StandardCharsets.UTF_8);
-        html = renderizarHtml(html);
+                exchange.getResponseHeaders().set("Location", "/");
+                exchange.sendResponseHeaders(303, -1);
+                return;
+            }
 
-        byte[] responseBytes = html.getBytes(StandardCharsets.UTF_8);
-        exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
-        exchange.sendResponseHeaders(200, responseBytes.length);
-        try (OutputStream os = exchange.getResponseBody()) {
-            os.write(responseBytes);
+            // Renderizar o HTML substituindo os dados do Java
+            Path htmlPath = webDir.resolve("BichinhoVirtual.html");
+            String html = Files.readString(htmlPath, StandardCharsets.UTF_8);
+            html = renderizarHtml(html);
+
+            byte[] responseBytes = html.getBytes(StandardCharsets.UTF_8);
+            exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
+            exchange.sendResponseHeaders(200, responseBytes.length);
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(responseBytes);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -114,7 +142,7 @@ public class Main {
         }
     }
 
-private static String renderizarHtml(String html) {
+    private static String renderizarHtml(String html) {
         if (pet == null) {
             return html
                 .replace("{{CLASSE_SELECAO}}", "")
@@ -155,7 +183,7 @@ private static String renderizarHtml(String html) {
             .replace("{{CLASSE_BTN_TEMPO}}", !vivo ? "btn-bloqueado" : "")
             .replace("{{LOGS}}", logHtml.toString());
     }
-    
+
     private static Map<String, String> parseForm(String body) {
         Map<String, String> map = new HashMap<>();
         for (String pair : body.split("&")) {
